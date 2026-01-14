@@ -102,7 +102,7 @@
     <div id="reader-view" class="fixed inset-0 bg-[var(--bg-color)] hidden flex-col items-center justify-center z-50">
         
         <!-- Exit Button (Hidden by default, shown on pause/finish) -->
-        <button id="reader-exit-btn" class="absolute top-8 right-8 text-[var(--sub-color)] hover:text-[var(--error-color)] transition-all duration-300 z-50 opacity-0 transform scale-90 p-2">
+        <button id="reader-exit-btn" class="absolute top-8 right-8 text-[var(--sub-color)] hover:text-[var(--error-color)] transition-all duration-300 z-50 opacity-0 transform scale-90 p-2 pointer-events-none">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -140,7 +140,7 @@
         </div>
 
         <!-- Info / Controls Overlay -->
-        <div id="reader-controls" class="absolute bottom-20 text-[var(--sub-color)] flex flex-col items-center gap-2 opacity-0 transition-opacity duration-300">
+        <div id="reader-controls" class="absolute bottom-20 text-[var(--sub-color)] flex flex-col items-center gap-2 opacity-0 transition-opacity duration-300 z-50 pointer-events-none">
             <div id="current-wpm-display" class="text-xl italic">300 wpm</div>
              <div class="w-64 h-1 bg-[var(--bg-secondary-color)] rounded-full overflow-hidden mt-2">
                 <div id="progress-bar" class="h-full bg-[var(--main-color)] w-0"></div>

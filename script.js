@@ -252,14 +252,14 @@ function togglePlay() {
 
 function setReaderControlsVisibility(visible) {
     if (visible) {
-        readerControls.classList.remove('opacity-0');
-        readerExitBtn.classList.remove('opacity-0', 'scale-90');
+        readerControls.classList.remove('opacity-0', 'pointer-events-none'); // Enable interaction
+        readerExitBtn.classList.remove('opacity-0', 'scale-90', 'pointer-events-none'); // Enable interaction
         readerExitBtn.classList.add('scale-100');
         document.body.style.cursor = 'default';
     } else {
-        readerControls.classList.add('opacity-0');
+        readerControls.classList.add('opacity-0', 'pointer-events-none'); // Disable interaction
         readerExitBtn.classList.remove('scale-100');
-        readerExitBtn.classList.add('opacity-0', 'scale-90');
+        readerExitBtn.classList.add('opacity-0', 'scale-90', 'pointer-events-none'); // Disable interaction
         document.body.style.cursor = 'none'; // Hide cursor for immersion
     }
 }
