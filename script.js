@@ -20,6 +20,8 @@ const guideBottom = document.getElementById('guide-bottom');
 const appearanceMenu = document.getElementById('appearance-menu');
 const fontBtns = document.querySelectorAll('.font-btn');
 const themeBtns = document.querySelectorAll('.theme-btn');
+const readerExitBtn = document.getElementById('reader-exit-btn');
+const readerControls = document.getElementById('reader-controls');
 
 
 let words = [];
@@ -216,6 +218,9 @@ function startReader() {
     updateSpeed(); // Show WPM
     updateGuideGap();
     
+    // UI Cleanup
+    setReaderControlsVisibility(false);
+
     // Small delay before starting
     setTimeout(() => {
         isPlaying = true;
@@ -230,16 +235,46 @@ function stopReader() {
     readerView.classList.remove('flex');
     settingsView.classList.remove('hidden');
     document.body.style.overflow = '';
+    // Show cursor again just in case
+    document.body.style.cursor = 'default';
 }
 
 function togglePlay() {
     isPlaying = !isPlaying;
     if (isPlaying) {
+        setReaderControlsVisibility(false);
         renderLoop();
     } else {
+        setReaderControlsVisibility(true);
         clearTimeout(timer);
     }
 }
+
+function setReaderControlsVisibility(visible) {
+    if (visible) {
+        readerControls.classList.remove('opacity-0');
+        readerExitBtn.classList.remove('opacity-0', 'scale-90');
+        readerExitBtn.classList.add('scale-100');
+        document.body.style.cursor = 'default';
+    } else {
+        readerControls.classList.add('opacity-0');
+        readerExitBtn.classList.remove('scale-100');
+        readerExitBtn.classList.add('opacity-0', 'scale-90');
+        document.body.style.cursor = 'none'; // Hide cursor for immersion
+    }
+}
+
+// Click to toggle play in reader view
+readerView.addEventListener('click', (e) => {
+    // Ignore if clicking the exit button directly (it has its own handler)
+    if (readerExitBtn.contains(e.target)) return;
+    togglePlay();
+});
+
+readerExitBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); // Prevent toggling play
+    stopReader();
+});
 
 function updateSpeed() {
     wpmInput.value = wpm;
@@ -256,6 +291,7 @@ function renderLoop() {
     if (!isPlaying) return;
     if (currentIndex >= words.length) {
         isPlaying = false;
+        setReaderControlsVisibility(true); // Show controls when finished
         return;
     }
 

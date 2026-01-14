@@ -91,6 +91,13 @@
     <!-- Reader View (RSVP Interface) -->
     <div id="reader-view" class="fixed inset-0 bg-[var(--bg-color)] hidden flex-col items-center justify-center z-50">
         
+        <!-- Exit Button (Hidden by default, shown on pause/finish) -->
+        <button id="reader-exit-btn" class="absolute top-8 right-8 text-[var(--sub-color)] hover:text-[var(--error-color)] transition-all duration-300 z-50 opacity-0 transform scale-90 p-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+        
         <!-- Focus Area -->
         <div class="relative w-full h-full flex flex-col items-center justify-center">
             
@@ -123,13 +130,16 @@
         </div>
 
         <!-- Info / Controls Overlay -->
-        <div class="absolute bottom-20 text-[var(--sub-color)] flex flex-col items-center gap-2">
+        <div id="reader-controls" class="absolute bottom-20 text-[var(--sub-color)] flex flex-col items-center gap-2 opacity-0 transition-opacity duration-300">
             <div id="current-wpm-display" class="text-xl italic">300 wpm</div>
              <div class="w-64 h-1 bg-[var(--bg-secondary-color)] rounded-full overflow-hidden mt-2">
                 <div id="progress-bar" class="h-full bg-[var(--main-color)] w-0"></div>
             </div>
             <div class="text-xs mt-1"><span id="word-counter">0</span> / <span id="total-words">0</span></div>
-            <div class="text-xs mt-4">press <span class="text-[var(--text-color)]">space</span> to pause, <span class="text-[var(--text-color)]">esc</span> to exit</div>
+            <div class="text-xs mt-4 text-center space-y-1">
+                <p>press <span class="bg-[var(--sub-color)] text-[var(--text-color)] px-1 rounded">space</span> to play/pause</p>
+                <p>click <span class="text-[var(--text-color)] font-bold">✕</span> or press <span class="bg-[var(--sub-color)] text-[var(--text-color)] px-1 rounded">esc</span> to exit</p>
+            </div>
         </div>
 
     </div>
