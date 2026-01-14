@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSVP Reader</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,700;1,400&family=Inter:wght@400;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> <!-- Placeholder for icons -->
+</head>
+<body class="bg-[var(--bg-color)] text-[var(--sub-color)] h-screen flex flex-col items-center justify-center overflow-hidden selection:bg-[var(--text-color)] selection:text-[var(--bg-color)]">
+
+    <!-- Settings / Input View -->
+    <div id="settings-view" class="w-full max-w-4xl p-8 flex flex-col gap-8 transition-opacity duration-300">
+        
+        <!-- Header / Nav (Monkeytype style) -->
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-[var(--text-color)] text-3xl font-bold cursor-pointer hover:text-white transition-colors" onclick="location.reload()">rsvp<span class="text-[var(--main-color)]">.</span>reader</h1>
+            <div class="flex gap-4 text-sm">
+                <button id="nav-text-btn" class="hover:text-[var(--text-color)] transition-colors"><i class="fas fa-keyboard"></i> text</button>
+                <button id="nav-settings-btn" class="hover:text-[var(--text-color)] transition-colors"><i class="fas fa-cog"></i> settings</button>
+            </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div id="toolbar" class="bg-[var(--bg-secondary-color)] p-4 rounded-lg flex flex-wrap gap-6 items-center justify-center text-sm shadow-md transition-all duration-300">
+            
+            <div class="flex items-center gap-2 group">
+                <span class="group-hover:text-[var(--text-color)]">mode:</span>
+                <button id="mode-input-btn" class="text-[var(--main-color)] font-bold transition-colors">input</button>
+                <button id="mode-file-btn" class="hover:text-[var(--text-color)] transition-colors">file</button>
+                <input type="file" id="file-upload" class="hidden" accept=".txt">
+            </div>
+
+            <div class="w-[1px] h-4 bg-[var(--sub-color)]"></div>
+
+            <div class="flex items-center gap-2 group">
+                <span class="group-hover:text-[var(--text-color)]">wpm:</span>
+                <input type="number" id="wpm-input" value="300" min="60" max="2000" class="bg-transparent border-b border-[var(--sub-color)] w-16 text-center focus:outline-none focus:border-[var(--main-color)] text-[var(--text-color)]">
+            </div>
+
+             <div class="w-[1px] h-4 bg-[var(--sub-color)]"></div>
+
+            <div class="flex items-center gap-2 group">
+                 <span class="group-hover:text-[var(--text-color)]">font size:</span>
+                 <input type="range" id="size-input" min="20" max="150" value="64" class="accent-[var(--main-color)]">
+                 <span id="size-value" class="w-8 text-right">64px</span>
+            </div>
+        </div>
+
+        <!-- Appearance Menu (Hidden by default) -->
+        <div id="appearance-menu" class="bg-[var(--bg-secondary-color)] p-6 rounded-lg shadow-xl overflow-hidden hidden transform transition-all duration-300 opacity-0 scale-95 origin-top">
+            <div class="flex flex-col gap-6">
+                 <!-- Fonts -->
+                 <div class="flex flex-col gap-2">
+                    <span class="text-sm font-bold text-[var(--text-color)]">Font Family</span>
+                    <div class="flex gap-2">
+                        <button class="font-btn bg-[var(--bg-color)] px-4 py-2 rounded hover:text-[var(--text-color)] transition-colors text-[var(--main-color)]" data-font="'Roboto Mono', monospace">Mono</button>
+                        <button class="font-btn bg-[var(--bg-color)] px-4 py-2 rounded hover:text-[var(--text-color)] transition-colors" data-font="'Inter', sans-serif">Sans</button>
+                        <button class="font-btn bg-[var(--bg-color)] px-4 py-2 rounded hover:text-[var(--text-color)] transition-colors" data-font="'Merriweather', serif">Serif</button>
+                    </div>
+                </div>
+
+                <!-- Themes -->
+                <div class="flex flex-col gap-2">
+                     <span class="text-sm font-bold text-[var(--text-color)]">Theme</span>
+                     <div class="flex gap-2">
+                        <button class="theme-btn bg-[#323437] text-[#e2b714] px-4 py-2 rounded border border-transparent hover:border-[#e2b714]" data-theme="dark">Dark</button>
+                        <button class="theme-btn bg-[#e5e5e5] text-[#374151] px-4 py-2 rounded border border-transparent hover:border-[#d97706]" data-theme="light">Light</button>
+                        <button class="theme-btn bg-[#000000] text-[#00e600] px-4 py-2 rounded border border-transparent hover:border-[#00e600]" data-theme="oled">OLED</button>
+                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Text Input Area -->
+        <textarea id="text-input" class="w-full h-64 bg-transparent resize-none focus:outline-none text-[var(--text-color)] placeholder-[var(--sub-color)] text-lg leading-relaxed p-4 border-l-2 border-transparent focus:border-[var(--main-color)] transition-all" placeholder="Paste your text here to begin reading..."></textarea>
+
+        <!-- Actions -->
+        <div class="flex justify-center mt-4">
+            <button id="start-btn" class="bg-[var(--main-color)] text-[var(--bg-color)] px-8 py-3 rounded font-bold text-lg hover:opacity-90 transition-opacity shadow-lg">Start Reading</button>
+        </div>
+
+        <div class="text-center text-xs mt-8 opacity-50">
+            <p>press <span class="bg-[var(--sub-color)] text-[var(--text-color)] px-1 rounded">space</span> to start/pause</p>
+        </div>
+    </div>
+
+
+    <!-- Reader View (RSVP Interface) -->
+    <div id="reader-view" class="fixed inset-0 bg-[var(--bg-color)] hidden flex-col items-center justify-center z-50">
+        
+        <!-- Focus Area -->
+        <div class="relative w-full h-full flex flex-col items-center justify-center">
+            
+            <!-- Top Guide Line -->
+            <div class="flex flex-col items-center mb-2 translate-y-[-100%] transition-transform duration-200" id="guide-top">
+                <div class="w-64 h-[2px] bg-[var(--sub-color)]"></div>
+                <div class="w-[2px] h-3 bg-[var(--sub-color)]"></div> <!-- Top notch -->
+            </div>
+
+            <!-- Word Display Container -->
+            <!-- Using absolute positioning for strict center alignment -->
+            <div id="rsvp-container" class="absolute inset-0 flex items-center justify-center pointer-events-none w-full">
+                 <div id="rsvp-display" class="relative text-[var(--text-color)] whitespace-nowrap w-full text-center" style="font-size: 64px;">
+                     <!-- Word injected here -->
+                     <!-- Initial view should also be robust -->
+                     <div class="flex items-baseline justify-center w-full">
+                        <div class="flex-1 text-right flex justify-end"></div>
+                        <div class="flex-none flex justify-center w-[1ch]"><span class="text-[var(--text-color)]">ready</span></div>
+                        <div class="flex-1 text-left flex justify-start"></div>
+                    </div>
+                 </div>
+            </div>
+
+             <!-- Bottom Guide Line -->
+             <div class="flex flex-col items-center mt-2 translate-y-[100%] transition-transform duration-200" id="guide-bottom">
+                <div class="w-[2px] h-3 bg-[var(--sub-color)]"></div> <!-- Bottom notch -->
+                <div class="w-64 h-[2px] bg-[var(--sub-color)]"></div>
+             </div>
+
+        </div>
+
+        <!-- Info / Controls Overlay -->
+        <div class="absolute bottom-20 text-[var(--sub-color)] flex flex-col items-center gap-2">
+            <div id="current-wpm-display" class="text-xl italic">300 wpm</div>
+             <div class="w-64 h-1 bg-[var(--bg-secondary-color)] rounded-full overflow-hidden mt-2">
+                <div id="progress-bar" class="h-full bg-[var(--main-color)] w-0"></div>
+            </div>
+            <div class="text-xs mt-1"><span id="word-counter">0</span> / <span id="total-words">0</span></div>
+            <div class="text-xs mt-4">press <span class="text-[var(--text-color)]">space</span> to pause, <span class="text-[var(--text-color)]">esc</span> to exit</div>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
